@@ -1,0 +1,47 @@
+def extract_word_features(df, col):
+    '''
+    Extract word features from the text column of the dataframe
+    using the above functions
+    '''
+    # Create a bag of words
+    bow_df = bag_of_words(df, col)
+    # Create a tfidf
+    tfidf_df = tfidf(df, col)
+    # Create a word embedding
+    # Create a word embedding
+    text_file = 'processed_output.txt'
+    model_file = 'model.bin'
+    create_arabic_word_embedding(text_file, model_file)
+    model = fasttext.load_model(model_file)
+    # Create a word embedding
+    word_embedding = []
+    for i in range(len(df)):
+        word_embedding.append(model.get_sentence_vector(df[col][i]))
+    word_embedding = pd.DataFrame(word_embedding)
+    # Concatenate the features
+    features = pd.concat([bow_df, tfidf_df, word_embedding], axis=1)
+    features = pd.DataFrame(features)
+    print(features.shape)
+    print(features.head())
+    return features
+
+
+# extract word features from the text file
+def extract_word_features_from_text_file(text_file, model_file):
+    #convert text file to dataframe
+    text_file = open(text_file, 'r')
+    text_file = text_file.readlines()
+    text_file = pd.DataFrame(text_file, columns=['text'])
+    #remove the \n from the text column
+    text_file['text'] = text_file['text'].apply(lambda x: x.replace('\n', ''))
+    print(text_file.head(20))
+    #use the extract_word_features function
+    features = extract_word_features(text_file, 'text')
+    print(features.head(20))
+    #save the features to a csv file
+    features.to_csv('features.csv', index=False)
+    return features
+
+text_file = 'processed_output.txt'
+model_file = 'model.bin'
+extract_word_features_from_text_file(text_file, model_file)
