@@ -45,3 +45,14 @@ def extract_word_features_from_text_file(text_file, model_file):
 text_file = 'processed_output.txt'
 model_file = 'model.bin'
 extract_word_features_from_text_file(text_file, model_file)
+
+====================
+#test : load word embed model 'word_embed_model.bin'
+# word_embed_model = fasttext.load_model('word_embed_model.bin')
+# words_id = word_embed_model.get_words()
+# embedding_input_vector_to_RNN = [
+#     word_embed_model.get_word_vector(word) for word in words_id
+# ]
+# embedding_input_vector_to_RNN = torch.tensor(embedding_input_vector_to_RNN)
+# embedding_input_vector_to_RNN = embedding_input_vector_to_RNN.unsqueeze(0)
+# print(embedding_input_vector_to_RNN.shape)
